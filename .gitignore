@@ -34,3 +34,10 @@ build/
 
 ### Docker ###
 .env
+
+### Terraform ###
+.terraform/
+*.tfstate
+*.tfstate.*
+terraform.tfvars
+crash.log
