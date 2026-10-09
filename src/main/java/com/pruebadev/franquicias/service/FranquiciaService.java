@@ -4,10 +4,17 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.pruebadev.franquicias.dto.*;
-import com.pruebadev.franquicias.exception.*;
+import com.pruebadev.franquicias.dto.FranquiciaResponse;
+import com.pruebadev.franquicias.dto.Nombre;
+import com.pruebadev.franquicias.dto.ProductoMayorStockResponse;
+import com.pruebadev.franquicias.dto.ProductoResponse;
+import com.pruebadev.franquicias.dto.Stock;
+import com.pruebadev.franquicias.dto.SucursalResponse;
+import com.pruebadev.franquicias.exception.RecursoDuplicadoException;
+import com.pruebadev.franquicias.exception.RecursoNoEncontradoException;
 import com.pruebadev.franquicias.entity.Franquicia;
 import com.pruebadev.franquicias.entity.Sucursal;
 import com.pruebadev.franquicias.entity.Producto;
@@ -15,11 +22,13 @@ import com.pruebadev.franquicias.repository.FranquiciaRepository;
 import com.pruebadev.franquicias.repository.ProductoRepository;
 import com.pruebadev.franquicias.repository.SucursalRepository;
 
+@Service
+@Transactional
 public class FranquiciaService {
-    
-    public final FranquiciaRepository franquiciaRepository;
-    public final SucursalRepository sucursalRepository;
-    public final ProductoRepository productoRepository;
+
+    private final FranquiciaRepository franquiciaRepository;
+    private final SucursalRepository sucursalRepository;
+    private final ProductoRepository productoRepository;
 
     public FranquiciaService(FranquiciaRepository franquiciaRepository, SucursalRepository sucursalRepository, ProductoRepository productoRepository) {
         this.franquiciaRepository = franquiciaRepository;
@@ -75,7 +84,7 @@ public class FranquiciaService {
                 .orElseThrow(() -> new RecursoNoEncontradoException("No se encontró la sucursal con id: " + sucursalId + " en la franquicia con id: " + franquiciaId));
     }
 
-    public ProductoResponse agregarProducto(Long franquiciaId, Long sucursalId, Producto request) {
+    public ProductoResponse agregarProducto(Long franquiciaId, Long sucursalId, com.pruebadev.franquicias.dto.Producto request) {
         Sucursal sucursal = obtenerSucursal(franquiciaId, sucursalId);
         String nombre = request.nombre().trim();
         if (productoRepository.existsByNombreAndSucursalId(nombre, sucursalId)) {
@@ -90,7 +99,7 @@ public class FranquiciaService {
 
     private Producto obtenerProducto(Long franquiciaId, Long sucursalId, Long productoId) {
         obtenerSucursal(franquiciaId, sucursalId);
-        return productoRepository.findByIdAndSucursalIdAndFranquiciaId(productoId, sucursalId, franquiciaId)
+        return productoRepository.findByIdAndSucursalIdAndSucursalFranquiciaId(productoId, sucursalId, franquiciaId)
                 .orElseThrow(() -> new RecursoNoEncontradoException("No se encontró el producto con id: " + productoId + " en la sucursal con id: " + sucursalId));
     }
 

@@ -3,14 +3,14 @@ package com.pruebadev.franquicias.entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "franquicias")
+@Table(name = "franquicia")
 public class Franquicia {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 100, unique = true)
+    @Column(nullable = false, length = 150, unique = true)
     private String nombre;
 
     protected Franquicia() {

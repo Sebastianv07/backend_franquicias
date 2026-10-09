@@ -13,7 +13,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 @RestControllerAdvice
-public class ManejadorGlobalExcepciones  {
+public class ManejadorGlobalExcepciones {
     
     @ExceptionHandler (RecursoNoEncontradoException.class)
     public ProblemDetail manejarNoEncontrado(RecursoNoEncontradoException ex) {

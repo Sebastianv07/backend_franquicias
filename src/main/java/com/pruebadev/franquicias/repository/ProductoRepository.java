@@ -11,13 +11,16 @@ import com.pruebadev.franquicias.entity.Producto;
 
 public interface ProductoRepository extends JpaRepository<Producto, Long> {
     
-    Optional<Producto> findByIdAndSucursalIdAndFranquiciaId(Long id, Long sucursalId, Long franquiciaId);
+    Optional<Producto> findByIdAndSucursalIdAndSucursalFranquiciaId(Long id, Long sucursalId, Long franquiciaId);
 
     boolean existsByNombreAndSucursalId(String nombre, Long sucursalId);
 
-    @Query ("""SELECT p FROM Producto p JOIN fetch p.sucursal s WHERE s.franquicia.id = :franquiciaId AND p.stock = (SELECT max(p2.stock) FROM Producto p2 WHERE p2.sucursal = p.sucursal) ORDER BY s.id, p.id""")
-
+    @Query("""
+            SELECT p FROM Producto p JOIN FETCH p.sucursal s
+            WHERE s.franquicia.id = :franquiciaId
+              AND p.stock = (SELECT MAX(p2.stock) FROM Producto p2 WHERE p2.sucursal = p.sucursal)
+            ORDER BY s.id, p.id
+            """)
     List<Producto> findProductosWithMaxStockByFranquiciaId(@Param("franquiciaId") Long franquiciaId);
 
-    
 }
