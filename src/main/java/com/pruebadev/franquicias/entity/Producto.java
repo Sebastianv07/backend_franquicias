@@ -11,13 +11,13 @@ public class Producto {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column (nullable = false, length = 150)
+    @Column(nullable = false, length = 150)
     private String nombre;
 
-    @Column (nullable = false)
+    @Column(nullable = false)
     private int stock;
 
-    @ManyToOne (fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "sucursal_id", nullable = false)
     private Sucursal sucursal;
 
